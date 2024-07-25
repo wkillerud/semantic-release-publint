@@ -1,6 +1,12 @@
 {
 	"name": "semantic-release-publint",
 	"version": "1.0.0",
+	"files": [
+		"package.json",
+		"LICENSE",
+		"README.md",
+		"index.js"
+	],
 	"exports": {
 		".": "./index.js"
 	},
