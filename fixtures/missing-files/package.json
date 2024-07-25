@@ -1,0 +1,8 @@
+{
+	"name": "missing-files",
+	"version": "1.0.0",
+	"private": true,
+	"type": "module",
+	"main": "./missing.js",
+	"types": "./missing.d.ts"
+}

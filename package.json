@@ -1,0 +1,27 @@
+{
+	"name": "semantic-release-publint",
+	"version": "1.0.0",
+	"exports": {
+		".": "./index.js"
+	},
+	"type": "module",
+	"scripts": {
+		"lint": "publint",
+		"test": "node --test index.test.js"
+	},
+	"keywords": [
+		"publint",
+		"semantic-release",
+		"semantic-release-plugin"
+	],
+	"author": "William Killerud <william@killerud.com> (https://www.williamkillerud.com/)",
+	"license": "MIT",
+	"description": "Run publint as part of the verify step in semantic-release.",
+	"dependencies": {
+		"picocolors": "^1.0.1",
+		"publint": "^0.2.9"
+	},
+	"devDependencies": {
+		"semantic-release": "^24.0.0"
+	}
+}
