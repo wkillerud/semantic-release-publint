@@ -4,29 +4,37 @@ import c from "picocolors";
 import { publint } from "publint";
 import { formatMessage } from "publint/utils";
 
-let DEBUG = Boolean(process.env.DEBUG);
-
 /**
  * @typedef {Omit<import('publint').Options, 'vfs'>} PublintPluginConfig
  */
 
 /**
+ * @typedef {object} Context
+ * @property {{ log: (message: string ) => void }} logger
+ * @property {string} cwd
+ * @property {object} options
+ * @property {boolean} [options.debug]
+ */
+
+/**
  * @param {PublintPluginConfig} [pluginConfig={}]
- * @param {{ logger: { log: (message: string ) => void } }} [context={ logger: console }]
+ * @param {Context} [context={ logger: console }]
  */
 export async function verifyConditions(
 	pluginConfig = {},
-	context = { logger: console }
+	context = { logger: console, cwd: process.cwd(), options: {} }
 ) {
-	let { logger } = context;
+	let { logger, cwd, options } = context;
+
+	let DEBUG = Boolean(process.env.DEBUG) || options.debug;
 
 	if (DEBUG) {
 		logger.log(`Running publint with config ${JSON.stringify(pluginConfig)}`);
 	}
 
 	let packageDirectory = pluginConfig.pkgDir
-		? path.resolve(pluginConfig.pkgDir)
-		: process.cwd();
+		? path.resolve(cwd, pluginConfig.pkgDir)
+		: cwd;
 	let packageJsonPath = path.join(packageDirectory, "package.json");
 
 	if (DEBUG) {
@@ -61,35 +69,52 @@ export async function verifyConditions(
 		let shouldThrow =
 			errors.length > 0 || (pluginConfig.strict && warnings.length > 0);
 
+		/** @type {string[]} */
+		let logs = [];
+
 		if (suggestions.length > 0) {
 			let title = c.bold("Suggestions:");
 			logger.log(title);
+			logs.push(title);
 			for (let suggestion of suggestions) {
 				let message = `  ${formatMessage(suggestion, packageJson)}`;
-				if (message) logger.log(message);
+				if (message) {
+					logger.log(message);
+					logs.push(message);
+				}
 			}
 		}
 
 		if (warnings.length > 0) {
 			let title = c.bold(c.yellow("Warnings:"));
 			logger.log(title);
+			logs.push(title);
 			for (let warning of warnings) {
 				let message = `  ${formatMessage(warning, packageJson)}`;
-				if (message) logger.log(message);
+				if (message) {
+					logger.log(message);
+					logs.push(message);
+				}
 			}
 		}
 
 		if (errors.length > 0) {
 			let title = c.bold(c.red("Errors:"));
 			logger.log(title);
+			logs.push(title);
 			for (let error of errors) {
 				let message = `  ${formatMessage(error, packageJson)}`;
-				if (message) logger.log(message);
+				if (message) {
+					logger.log(message);
+					logs.push(message);
+				}
 			}
 		}
 
 		if (shouldThrow) {
-			let message = `publint reported ${errors.length} errors and ${warnings.length} warnings`;
+			let message = `publint reported ${errors.length} errors and ${
+				warnings.length
+			} warnings\n${logs.join("\n")}`;
 			if (DEBUG) {
 				logger.log(message + ", throwing");
 			}
