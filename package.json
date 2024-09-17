@@ -25,7 +25,6 @@
 	"description": "Run publint as part of the verify step in semantic-release.",
 	"dependencies": {
 		"@semantic-release/error": "^4.0.0",
-		"picocolors": "^1.0.1",
 		"publint": "^0.2.11"
 	},
 	"devDependencies": {

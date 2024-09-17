@@ -1,7 +1,6 @@
 import SemanticReleaseError from "@semantic-release/error";
 import fs from "node:fs/promises";
 import path from "node:path";
-import c from "picocolors";
 import { publint } from "publint";
 import { formatMessage } from "publint/utils";
 
@@ -52,7 +51,7 @@ export async function verifyConditions(
 	}
 
 	if (messages.length === 0) {
-		logger.log(`${c.green("✓ no issues")}`);
+		logger.log("✓ no issues");
 	} else {
 		if (DEBUG) {
 			logger.log(`reading and parsing ${packageJsonPath} contents`);
@@ -74,7 +73,7 @@ export async function verifyConditions(
 		let logs = [];
 
 		if (suggestions.length > 0) {
-			let title = c.bold("Suggestions:");
+			let title = "\nSuggestions:";
 			logger.log(title);
 			logs.push(title);
 			for (let suggestion of suggestions) {
@@ -87,7 +86,7 @@ export async function verifyConditions(
 		}
 
 		if (warnings.length > 0) {
-			let title = c.bold(c.yellow("Warnings:"));
+			let title = "\nWarnings:";
 			logger.log(title);
 			logs.push(title);
 			for (let warning of warnings) {
@@ -100,7 +99,7 @@ export async function verifyConditions(
 		}
 
 		if (errors.length > 0) {
-			let title = c.bold(c.red("Errors:"));
+			let title = "\nErrors:";
 			logger.log(title);
 			logs.push(title);
 			for (let error of errors) {
