@@ -119,7 +119,9 @@ export async function verifyConditions(
 			if (DEBUG) {
 				logger.log(message + ", throwing");
 			}
-			throw new SemanticReleaseError(message, "EPUBLINT");
+			throw new SemanticReleaseError(message, "EPUBLINT", `${suggestions.join("\n")}
+${warnings.join("\n")}
+${errors.join("\n")}`.trim());
 		}
 	}
 }
