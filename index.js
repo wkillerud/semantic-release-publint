@@ -1,3 +1,4 @@
+import SemanticReleaseError from "@semantic-release/error";
 import fs from "node:fs/promises";
 import path from "node:path";
 import c from "picocolors";
@@ -118,7 +119,7 @@ export async function verifyConditions(
 			if (DEBUG) {
 				logger.log(message + ", throwing");
 			}
-			throw new Error(message);
+			throw new SemanticReleaseError(message, "EPUBLINT");
 		}
 	}
 }
