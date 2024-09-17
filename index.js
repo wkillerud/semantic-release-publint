@@ -78,7 +78,7 @@ export async function verifyConditions(
 			logger.log(title);
 			logs.push(title);
 			for (let suggestion of suggestions) {
-				let message = `  ${formatMessage(suggestion, packageJson)}`;
+				let message = `  ${formatMessage(suggestion, packageJson, { color: false })}`;
 				if (message) {
 					logger.log(message);
 					logs.push(message);
@@ -91,7 +91,7 @@ export async function verifyConditions(
 			logger.log(title);
 			logs.push(title);
 			for (let warning of warnings) {
-				let message = `  ${formatMessage(warning, packageJson)}`;
+				let message = `  ${formatMessage(warning, packageJson, { color: false })}`;
 				if (message) {
 					logger.log(message);
 					logs.push(message);
@@ -104,7 +104,7 @@ export async function verifyConditions(
 			logger.log(title);
 			logs.push(title);
 			for (let error of errors) {
-				let message = `  ${formatMessage(error, packageJson)}`;
+				let message = `  ${formatMessage(error, packageJson, { color: false })}`;
 				if (message) {
 					logger.log(message);
 					logs.push(message);
@@ -113,15 +113,12 @@ export async function verifyConditions(
 		}
 
 		if (shouldThrow) {
-			let message = `publint reported ${errors.length} errors and ${
-				warnings.length
-			} warnings\n${logs.join("\n")}`;
 			if (DEBUG) {
-				logger.log(message + ", throwing");
+				logger.log(`publint reported ${errors.length} errors and ${warnings.length} warnings\n${logs.join("\n")}`);
 			}
-			throw new SemanticReleaseError(message, "EPUBLINT", `${suggestions.join("\n")}
-${warnings.join("\n")}
-${errors.join("\n")}`.trim());
+
+			const errorMessage = `publint reported ${errors.length} errors and ${warnings.length} warnings`;
+			throw new SemanticReleaseError(errorMessage, "EPUBLINT",  logs.join("\n"));
 		}
 	}
 }
